@@ -1,0 +1,27 @@
+service: adhoc-serverless-demo
+frameworkVersion: '2'
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: 20201221
+  stage: dev
+  region: us-east-1
+  iam:
+    role:
+      managedPolicies:
+        - ${env:INBOUND_BUCKET_IAM_ROLE} 
+        - ${env:OUTBOUND_BUCKET_IAM_ROLE} 
+
+functions:
+  transfer:
+    handler: handler.transfer
+    events:
+      - s3: 
+          bucket: ${env:INBOUND_BUCKET}
+          event: s3:ObjectCreated:*
+          existing: true
+
+plugins:
+  - serverless-python-requirements
