@@ -2,7 +2,8 @@ import json
 
 
 def transfer(event, context):
-    print("Event:")
-    print(event)
-    print("context:")
-    print(context)
+    for record in event['Records']:
+        s3 = record['s3']
+        bucket = s3['bucket']['name']
+        key = s3["object"]['key']
+        print(f"key: {bucket}/{key}")
