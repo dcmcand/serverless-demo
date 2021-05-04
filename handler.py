@@ -9,15 +9,14 @@ def transfer(event, context):
     except Exception as e:
         print(e)
     for record in event['Records']:
+        inbound_bucket = record['s3']['bucket']['name']
+        key = s3["object"]['key']
+        print(f"Copying {inbound_bucket}/{key} to {outbound_bucket}/{key}")
+        source = {
+            'Bucket': inbound_bucket,
+            'Key': key
+        }
         try:
-            inbound_bucket = record['s3']['bucket']['name']
-            key = s3["object"]['key']
-            print(f"Copying {inbound_bucket}/{key} to {outbound_bucket}/{key}")
-            source = {
-                'Bucket': inbound_bucket,
-                'Key': key
-            }
-
             destination = s3.Bucket(outbound_bucket)
             obj = destination.Object(key)
             obj.copy(source)
