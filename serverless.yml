@@ -25,6 +25,8 @@ functions:
           bucket: ${env:INBOUND_BUCKET}
           event: s3:ObjectCreated:*
           existing: true
+    environment:
+      OUTBOUND_BUCKET: ${env:OUTBOUND_BUCKET}
 
 plugins:
   - serverless-python-requirements
